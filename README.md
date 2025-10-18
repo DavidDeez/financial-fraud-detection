@@ -1,6 +1,6 @@
 # Cost-Sensitive Learning for Imbalanced Financial Fraud Detection
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/davidolu12/financial-fraud-detection/blob/main/fraud_detection.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DavidDeez/financial-fraud-detection/blob/main/fraud_detection.ipynb)
 
 Research project implementing cost-sensitive machine learning techniques for highly imbalanced financial fraud detection (1:1000 class ratio).
 
@@ -18,7 +18,7 @@ This project addresses the critical challenge of class imbalance in financial fr
 
 ```bash
 # Clone repository
-git clone https://github.com/davidolu12/financial-fraud-detection.git
+git clone https://github.com/DavidDeez/financial-fraud-detection.git
 
 # Install dependencies
 pip install -r requirements.txt
