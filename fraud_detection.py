@@ -17,6 +17,7 @@ import plotly.express as px
 from datetime import datetime
 import socket
 import time
+import os
 
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import RobustScaler
@@ -1194,18 +1195,17 @@ def create_complete_interface():
 if __name__ == "__main__":
     print("Starting Advanced Credit Card Fraud Detection System...")
 
-    # Find available port
-    available_port = find_available_port(7860)
-    print(f"Using port: {available_port}")
-
     # Create and launch the enhanced interface
     demo = create_complete_interface()
+
+    # Get port from environment variable (default to 10000 for Render, or 7860 locally)
+    port = int(os.environ.get("PORT", 7860))
+    print(f"Using port: {port}")
 
     # Launch with available port
     demo.launch(
         server_name="0.0.0.0",
-        server_port=available_port,
+        server_port=port,
         share=False,
         debug=False
     )
-
