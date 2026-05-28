@@ -335,32 +335,23 @@ def run_full_pipeline(n_samples=10000):
     global global_model, global_data, global_X_test, global_y_test
     global global_metrics, global_drift_monitor, global_trainer, global_y_pred_proba
 
-    progress_text = "Starting Enhanced Pipeline...
-
-"
+    progress_text = "Starting Enhanced Pipeline...\n\n"
 
     # 1. Data Generation
-    progress_text += "Step 1/6: Generating synthetic data...
-"
+    progress_text += "Step 1/6: Generating synthetic data...\n"
     df = generate_synthetic_data(n_samples=n_samples)
     global_data = df
-    progress_text += f"Generated {len(df)} transactions ({df['Class'].sum():.0f} frauds)
-
-"
+    progress_text += f"Generated {len(df)} transactions ({df['Class'].sum():.0f} frauds)\n\n"
 
     # 2. Feature Engineering
-    progress_text += "Step 2/6: Advanced feature engineering...
-"
+    progress_text += "Step 2/6: Advanced feature engineering...\n"
     engineer = FeatureEngineer()
     df = engineer.create_features(df)
     X, y = engineer.prepare_features(df)
-    progress_text += f"Created {X.shape[1]} features
-
-"
+    progress_text += f"Created {X.shape[1]} features\n\n"
 
     # 3. Train-Test Split
-    progress_text += "Step 3/6: Splitting data...
-"
+    progress_text += "Step 3/6: Splitting data...\n"
     X_train, X_temp, y_train, y_temp = train_test_split(
         X, y, test_size=0.3, random_state=42, stratify=y
     )
@@ -369,65 +360,41 @@ def run_full_pipeline(n_samples=10000):
     )
     global_X_test = X_test
     global_y_test = y_test
-    progress_text += f"Train: {len(X_train)}, Val: {len(X_val)}, Test: {len(X_test)}
-
-"
+    progress_text += f"Train: {len(X_train)}, Val: {len(X_val)}, Test: {len(X_test)}\n\n"
 
     # 4. Cost-Sensitive Model Training
-    progress_text += "Step 4/6: Training cost-sensitive XGBoost...
-"
+    progress_text += "Step 4/6: Training cost-sensitive XGBoost...\n"
     trainer = CostSensitiveModelTrainer()
     model = trainer.train_model(X_train, y_train, X_val, y_val)
     global_model = model
     global_trainer = trainer
-    progress_text += f"Model trained successfully
-"
-    progress_text += f"Optimal threshold found: {trainer.optimal_threshold:.3f}
-
-"
+    progress_text += f"Model trained successfully\n"
+    progress_text += f"Optimal threshold found: {trainer.optimal_threshold:.3f}\n\n"
 
     # 5. Evaluation
-    progress_text += "Step 5/6: Evaluating with optimal threshold...
-"
+    progress_text += "Step 5/6: Evaluating with optimal threshold...\n"
     metrics, y_pred, y_pred_proba = trainer.evaluate(X_test, y_test)
     global_metrics = metrics
     global_y_pred_proba = y_pred_proba
 
-    progress_text += f"Accuracy: {metrics['accuracy']:.4f}
-"
-    progress_text += f"Precision: {metrics['precision']:.4f}
-"
-    progress_text += f"Recall: {metrics['recall']:.4f}
-"
-    progress_text += f"F1-Score: {metrics['f1']:.4f}
-"
-    progress_text += f"ROC-AUC: {metrics['roc_auc']:.4f}
-"
-    progress_text += f"Expected Profit: ${metrics['total_profit']:,.2f}
-
-"
+    progress_text += f"Accuracy: {metrics['accuracy']:.4f}\n"
+    progress_text += f"Precision: {metrics['precision']:.4f}\n"
+    progress_text += f"Recall: {metrics['recall']:.4f}\n"
+    progress_text += f"F1-Score: {metrics['f1']:.4f}\n"
+    progress_text += f"ROC-AUC: {metrics['roc_auc']:.4f}\n"
+    progress_text += f"Expected Profit: ${metrics['total_profit']:,.2f}\n\n"
 
     # 6. Drift Monitoring Setup
-    progress_text += "Step 6/6: Setting up monitoring...
-"
+    progress_text += "Step 6/6: Setting up monitoring...\n"
     global_drift_monitor = DriftMonitor(X_train)
-    progress_text += "Drift monitoring initialized
+    progress_text += "Drift monitoring initialized\n\n"
 
-"
-
-    progress_text += "Enhanced Pipeline completed!
-"
-    progress_text += f"
-Key Improvements:
-"
-    progress_text += f"Cost-sensitive learning applied
-"
-    progress_text += f"Optimal threshold: {trainer.optimal_threshold:.3f} (vs default 0.5)
-"
-    progress_text += f"Better precision-recall balance
-"
-    progress_text += f"Two-stage decision system ready
-"
+    progress_text += "Enhanced Pipeline completed!\n"
+    progress_text += f"\nKey Improvements:\n"
+    progress_text += f"Cost-sensitive learning applied\n"
+    progress_text += f"Optimal threshold: {trainer.optimal_threshold:.3f} (vs default 0.5)\n"
+    progress_text += f"Better precision-recall balance\n"
+    progress_text += f"Two-stage decision system ready\n"
 
     # Create metrics dataframe
     metrics_df = pd.DataFrame([{
@@ -454,9 +421,7 @@ def predict_transaction(v1, v2, v3, amount):
 
     validation_errors = security_validator.validate_transaction_input(features_dict)
     if validation_errors:
-        error_msg = "Security validation failed:
-" + "
-".join(validation_errors)
+        error_msg = "Security validation failed:\n" + "\n".join(validation_errors)
         return error_msg, 0.0, "VALIDATION_ERROR"
 
     # Create feature vector
@@ -659,8 +624,7 @@ def check_drift():
     """
 
     for idx, row in drift_df.head().iterrows():
-        summary += f"
-- {row['feature']}: PSI={row['psi']:.4f}, p-value={row['p_value']:.4f}"
+        summary += f"\n- {row['feature']}: PSI={row['psi']:.4f}, p-value={row['p_value']:.4f}"
 
     return summary, drift_df
 
@@ -835,8 +799,7 @@ def retrain_model_with_new_data(new_data_ratio=0.1):
         )
 
         # Retrain model
-        progress_text = "Retraining model with new data...
-"
+        progress_text = "Retraining model with new data...\n"
 
         trainer = CostSensitiveModelTrainer()
         model = trainer.train_model(X_train, y_train, X_val, y_val)
@@ -849,22 +812,14 @@ def retrain_model_with_new_data(new_data_ratio=0.1):
         # Evaluate new model
         metrics, _, _ = trainer.evaluate(X_test, y_test)
 
-        progress_text += f"Retraining completed successfully!
-"
-        progress_text += f"New dataset size: {len(combined_data)} transactions
-"
-        progress_text += f"New optimal threshold: {trainer.optimal_threshold:.3f}
-"
-        progress_text += f"New model performance:
-"
-        progress_text += f"- Accuracy: {metrics['accuracy']:.4f}
-"
-        progress_text += f"- Precision: {metrics['precision']:.4f}
-"
-        progress_text += f"- Recall: {metrics['recall']:.4f}
-"
-        progress_text += f"- Expected Profit: ${metrics['total_profit']:,.2f}
-"
+        progress_text += f"Retraining completed successfully!\n"
+        progress_text += f"New dataset size: {len(combined_data)} transactions\n"
+        progress_text += f"New optimal threshold: {trainer.optimal_threshold:.3f}\n"
+        progress_text += f"New model performance:\n"
+        progress_text += f"- Accuracy: {metrics['accuracy']:.4f}\n"
+        progress_text += f"- Precision: {metrics['precision']:.4f}\n"
+        progress_text += f"- Recall: {metrics['recall']:.4f}\n"
+        progress_text += f"- Expected Profit: ${metrics['total_profit']:,.2f}\n"
 
         return progress_text
 
